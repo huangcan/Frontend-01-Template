@@ -1,0 +1,40 @@
+<script>
+  /**
+   * 问题：写出匹配所有Number直接量的正则表达式
+   * **/
+
+  function verify_number(Num) {
+    let reg = /^[0-9]*$/;
+    if (!reg.test(Num)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  console.log(verify_number(123));
+
+  /**
+   * 问题：写出UTF-8 Encoding 的函数
+   * **/
+  function encode_utf8(s) {
+    return unescape(encodeURIComponent(s));
+  }
+  function decode_utf8(s) {
+    return decodeURIComponent(escape(s));
+  }
+
+  /**
+   * 问题：写出匹配所有字符串直接量、单引号和双引号的正则
+   * **/
+
+  function verify_string(str) {
+    let reg = /^[A-Za-z'\x22]+$/;
+    if (!reg.test(str)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  console.log(verify_string('asd"'));
+
+</script>
