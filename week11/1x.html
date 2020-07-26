@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <style>
   .cell {
     display: inline-block;
@@ -10,16 +11,16 @@
   }
   #container {
     width: 701px;
+    flex-wrap: wrap;
+    display: flex;
   }
 </style>
 <div id="container"></div>
-<button onclick="localStorage.map = JSON.stringify(map)">save</button>
+<button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
 
 <script>
   // var map = new Array(10001).join(0).split('').map(s => Number(s));
-  console.log(localStorage.map)
-  var map = localStorage.map ? JSON.stringify(localStorage.map) : new Array(10000).fill(0);
-  
+  var map = localStorage["map"] ? JSON.parse(localStorage["map"]) : new Array(10000).fill(0);
   let container = document.getElementById("container");
   for(let y = 0; y < 100; y++){
     for(let x = 0; x < 100; x++){
@@ -31,7 +32,7 @@
         
       
       cell.addEventListener("mouseover", () => {
-        if(mouse) {
+        if(mousedown) {
           if(clear) {
             cell.style.backgroundColor = '';
             map[y * 100 + x] = 0;
@@ -44,19 +45,43 @@
       container.appendChild(cell);
     }
   }
-  let mouse = false;
+  let mousedown = false;
   let clear = false;
 
   document.addEventListener('mousedown', e => {
-    mouse = true;
+    mousedown = true;
     clear = (e.which === 3);
     
   })
-  document.addEventListener('mouseup', ()=> mouse = false)
+  document.addEventListener('mouseup', ()=> mousedown = false)
 
   document.addEventListener('contextmenu', e => e.preventDefault())
 
-  function path(map, start, end){
-    
+  function findPath(map, start, end){
+    map = map.slice();
+    let queue = [start];
+
+    function insert([x, y]){
+      if(map[100 * y + x] !== 0){
+        return;
+      }
+      if(x < 0 || y < 0 || x >= 100 || y >=100)
+        return;
+      map(100 * y + x) = 2;
+      queue.push(x, y);
+    }
+
+    while(queue.length) {
+      let [x, y] = queue.shift();
+      console.log(x, y);
+      if(x === end[0] && y === end[1]){
+        return true;
+      }
+      insert([x - 1, y]);
+      insert([x + 1, y]);
+      insert([x, y - 1]);
+      insert([x, y + 1]);
+    }
+    return false;
   }
 </script>
